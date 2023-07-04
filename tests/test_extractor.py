@@ -1,20 +1,34 @@
 import unittest
-import textwrap
+from textwrap import dedent
 
-from content_extractor import ContentExtractor
+from .utils import extract_from_file, extract_from_file_with_test_rules
 
 
-class MyTestCase(unittest.TestCase):
-    def test_something(self):
-        extractor = ContentExtractor()
-        text = extractor.extract_from_url("https://moslenta.ru/news/city/van-khelsing-01-07-2023.htm")
-        print(text)
-        self.assertEqual(True, True)  # add assertion here
+class ContentExtractorTests(unittest.TestCase):
+    def test_simple_01(self):
+        text = extract_from_file("simple_01.html")
+        self.assertEqual(dedent("""
+        # Заголовок
+        
+        Первый параграф статьи. Который состоит из нескольких строк и [http://localhost]
+        ссылки
+        
+        Еще один параграф статьи.
+        """).strip("\n"), text)
 
-    def test_textwrap(self):
-        line = "   Длинная       длинная           строка, которая содержит разделители   \n   строк"
-        lines = textwrap.wrap(line, width=25, )
-        print("\n".join(lines))
+    def test_host_specific_rule_applied(self):
+        text = extract_from_file_with_test_rules("simple_01.html")
+        self.assertEqual(dedent("""
+        Навигация Home Profile
+
+        # Заголовок
+        
+        Первый параграф статьи. Который состоит из нескольких строк и [http://localhost]
+        ссылки
+        
+        Еще один параграф статьи.
+        """).strip("\n"), text, "Должен включать блок с навигацией, в соответствии с кастомным правилом для домена "
+                                "test")
 
 
 if __name__ == '__main__':

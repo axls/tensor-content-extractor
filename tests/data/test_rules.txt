@@ -1,6 +1,15 @@
 domain:*
 -tag:header
 -tag:footer
+-tag:style
+-tag:script
+-tag:head
+-tag:iframe
+-tag:textarea
+-tag:template
+-tag:title
+-tag:button
+-tag:svg
 -class:nav
 -class:footer
 -class:banner*
@@ -31,3 +40,11 @@ domain:*
 -class:*rambler*
 -class:*send*
 -class:*telegram*
+-class:*invisible*
+-class:*hidden*
+-class:*hide*
+-attr:href:*prime.rambler.ru*
+header:tag:h1,h2,h3,h4,h5,h6
+paragraph:tag:p,div
+domain:test
++class:nav
